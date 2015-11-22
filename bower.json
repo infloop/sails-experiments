@@ -1,0 +1,28 @@
+{
+  "name": "bower-test",
+  "description": "Sails.js experiments",
+  "main": "app.js",
+  "authors": [
+    "Infloop"
+  ],
+  "dependencies": {
+    "sass-bootstrap": "~3.0.0",
+    "modernizr": "~2.6.2",
+    "jquery": "~1.10.2",
+    "swagger-ui": "~2.1.3"
+  },
+  "license": "MIT",
+  "keywords": [
+    "sails.js"
+  ],
+  "moduleType": [],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -32,9 +32,9 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {
-    view: 'homepage'
-  }
+  //'/': {
+  //  view: 'homepage'
+  //}
 
   /***************************************************************************
   *                                                                          *
@@ -46,4 +46,9 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
+  'POST /api/v1/users': {controller: "UserController", action: "create"},
+  'PUT /api/v1/users/:id': {controller: "UserController", action: "update"},
+  'DELETE /api/v1/users/:id': {controller: "UserController", action: "remove"},
+  'GET /api/v1/users/:id': {controller: "UserController", action: "findOne"},
+  'GET /api/v1/users': {controller: "UserController", action: "find"}
 };

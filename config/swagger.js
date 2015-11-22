@@ -6,5 +6,6 @@ module.exports.swagger = {
   pkg: require('../package'),
   ui: {
     url: 'http://swaggerui.balderdash.io'
-  }
+  },
+  basePath: '/api/v1'
 };
