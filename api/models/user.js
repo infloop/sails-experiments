@@ -13,6 +13,12 @@ function hashPassword(values, next) {
 
 module.exports = {
   attributes: {
+    id: {
+      type: 'STRING',
+      primaryKey: true,
+      required: true,
+      swagger: false
+    },
     username: {
       type: 'STRING',
       required: true,
