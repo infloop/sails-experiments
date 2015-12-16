@@ -16,8 +16,7 @@ module.exports = {
     id: {
       type: 'STRING',
       primaryKey: true,
-      required: true,
-      swagger: false
+      required: true
     },
     username: {
       type: 'STRING',

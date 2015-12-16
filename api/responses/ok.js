@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * 200 (OK) Response
  *
@@ -14,9 +16,9 @@
 module.exports = function sendOK (data, options) {
 
   // Get access to `req`, `res`, & `sails`
-  var req = this.req;
-  var res = this.res;
-  var sails = req._sails;
+  let req = this.req;
+  let res = this.res;
+  let sails = req._sails;
 
   sails.log.silly('res.ok() :: Sending 200 ("OK") response');
 

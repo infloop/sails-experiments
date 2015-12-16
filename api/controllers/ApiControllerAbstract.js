@@ -4,12 +4,32 @@
  */
 var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil.js');
 
+var route = require('./swaggerDocs');
+
 class ApiController {
 
-  constructor(sails) {
-    console.log(sails);
+  constructor() {
+    this._config = { actions: false, rest: false, shortcuts: false };
+
+    /**
+     * small crunch to override sails controller structure
+     */
+    this.create = this.create;
+    this.find = this.find;
+    this.updateOne = this.updateOne;
+    this.findOne = this.findOne;
+    this.destroyOne = this.destroyOne;
   }
 
+  @route({
+    inherited: false,
+    model: null,
+    modelEditable: null,
+    http: null,
+    description: 'The response body contains properties of {model} settings.\n',
+    accepts: {args:'JSON', type: null, required: true, http: {source: 'body'}},
+    returns: {arg: 'JSON', type: null, root: true, description: 'The response body contains properties of {model} settings.\n'}
+  })
   create(req, res) {
     var Model = actionUtil.parseModel(req);
 
@@ -41,6 +61,15 @@ class ApiController {
     });
   }
 
+  @route({
+    inherited: false,
+    model: null,
+    modelEditable: null,
+    http: null,
+    description: 'Destroy {model}.\n',
+    accepts: {args:'JSON', type: null, required: true, http: {source: 'body'}},
+    returns: {arg: 'JSON', type: null, root: true, description: 'The response body contains properties of {model} settings.\n'}
+  })
   destroyOne(req, res) {
   var Model = actionUtil.parseModel(req);
   var pk = actionUtil.requirePk(req);
@@ -197,7 +226,7 @@ class ApiController {
         });
       }
 
-      res.ok(matchingRecords);
+      res.dataOk(matchingRecords);
     });
   }
 }

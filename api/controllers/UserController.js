@@ -1,7 +1,8 @@
 'use strict';
 
-var ApiController = require('./ApiController');
+var ApiController = require('./ApiControllerAbstract');
 
+var route = require('./swaggerDocs');
 
 /**
  * UserController
@@ -13,18 +14,28 @@ var ApiController = require('./ApiController');
  */
 class UserController extends ApiController {
 
+  constructor() {
+    super();
+  }
+
   /**
-   * @sw-description('The response body contains properties of user settings.\n')
-   * @sw-accepts({args:'json', type: "User", required: true, http: {source: 'body'}})
-   * @sw-returns({arg: 'data', type: 'User', root: true, description: 'The response body contains properties of user settings.\n'})
-   * @sw-http({verb: 'post', path: '/users'})
    *
-   * @param {req} req
-   * @param {res} res
-   */
+   * @param req
+   * @param res
+  */
+  @route({
+    inherited: false,
+    model: 'user',
+    modelEditable: 'userEditable',
+    http: {verb: 'post', path: '/users'},
+    description: 'The response body contains properties of {model} settings.\n',
+    accepts: {args:'JSON', type: "userEditable", required: true, http: {source: 'body'}},
+    returns: {arg: 'JSON', type: "user", root: true, description: 'The response body contains properties of {model} settings.\n'}
+  })
   create(req, res) {
     super.create(req, res);
   }
+
 
   updateOne(req, res) {
     super.updateOne(req, res);
@@ -32,8 +43,8 @@ class UserController extends ApiController {
 
   /**
    * @sw-description('The response body contains properties of user settings.\n')
-   * @sw-accepts({args:'json', type: "User", required: true, http: {source: 'body'}})
-   * @sw-returns({arg: 'data', type: 'User', root: true, description: 'The response body contains properties of user settings.\n'})
+   * @sw-accepts(})
+   * @sw-returns()
    * @sw-http({verb: 'post', path: '/users'})
    *
    * @param {req} req
@@ -62,4 +73,5 @@ class UserController extends ApiController {
   }
 }
 
-module.exports = (new UserController());
+var a = module.exports = new UserController();
+console.log(a);
