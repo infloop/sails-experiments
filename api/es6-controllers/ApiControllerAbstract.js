@@ -4,7 +4,10 @@
  */
 var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil.js');
 
-var route = require('./swaggerDocs');
+let decorators = require('./Decorators');
+var route = decorators.route;
+var description = decorators.description;
+var swagger = decorators.swagger;
 
 class ApiController {
 
@@ -21,12 +24,12 @@ class ApiController {
     this.destroyOne = this.destroyOne;
   }
 
-  @route({
+  @description('The response body contains properties of {model} settings.\n')
+  @route({verb: 'post', path: '/users'})
+  @swagger({
     inherited: false,
     model: null,
     modelEditable: null,
-    http: null,
-    description: 'The response body contains properties of {model} settings.\n',
     accepts: {args:'JSON', type: null, required: true, http: {source: 'body'}},
     returns: {arg: 'JSON', type: null, root: true, description: 'The response body contains properties of {model} settings.\n'}
   })
