@@ -12,7 +12,7 @@ var route = require('./swaggerDocs');
  *
  * @sw-model-alias({name: UserEditable, model: User, exclude: ['id']})
  */
-let UserController = class UserController extends ApiController {
+class UserController extends ApiController {
 
   constructor() {
     super();
@@ -35,6 +35,7 @@ let UserController = class UserController extends ApiController {
   create(req, res) {
     super.create(req, res);
   }
+
 
   updateOne(req, res) {
     super.updateOne(req, res);
@@ -70,8 +71,7 @@ let UserController = class UserController extends ApiController {
   destroyOne(req, res) {
     super.destroyOne(req, res);
   }
-};
+}
 
 var a = module.exports = new UserController();
 console.log(a);
-//# sourceMappingURL=sourcemaps/UserController.js.map

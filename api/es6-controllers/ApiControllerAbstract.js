@@ -2,51 +2,11 @@
 /**
  * Module dependencies
  */
-
-var _dec, _desc, _value, _class;
-
-function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
-  var desc = {};
-  Object['ke' + 'ys'](descriptor).forEach(function (key) {
-    desc[key] = descriptor[key];
-  });
-  desc.enumerable = !!desc.enumerable;
-  desc.configurable = !!desc.configurable;
-
-  if ('value' in desc || desc.initializer) {
-    desc.writable = true;
-  }
-
-  desc = decorators.slice().reverse().reduce(function (desc, decorator) {
-    return decorator(target, property, desc) || desc;
-  }, desc);
-
-  if (context && desc.initializer !== void 0) {
-    desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
-    desc.initializer = undefined;
-  }
-
-  if (desc.initializer === void 0) {
-    Object['define' + 'Property'](target, property, desc);
-    desc = null;
-  }
-
-  return desc;
-}
-
 var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil.js');
 
 var route = require('./swaggerDocs');
 
-let ApiController = (_dec = route({
-  inherited: false,
-  model: null,
-  modelEditable: null,
-  http: null,
-  description: 'The response body contains properties of {model} settings.\n',
-  accepts: { args: 'JSON', type: null, required: true, http: { source: 'body' } },
-  returns: { arg: 'JSON', type: null, root: true, description: 'The response body contains properties of {model} settings.\n' }
-}), (_class = class ApiController {
+class ApiController {
 
   constructor() {
     this._config = { actions: false, rest: false, shortcuts: false };
@@ -61,12 +21,22 @@ let ApiController = (_dec = route({
     this.destroyOne = this.destroyOne;
   }
 
+  @route({
+    inherited: false,
+    model: null,
+    modelEditable: null,
+    http: null,
+    description: 'The response body contains properties of {model} settings.\n',
+    accepts: {args:'JSON', type: null, required: true, http: {source: 'body'}},
+    returns: {arg: 'JSON', type: null, root: true, description: 'The response body contains properties of {model} settings.\n'}
+  })
   create(req, res) {
     var Model = actionUtil.parseModel(req);
 
     // Create data object (monolithic combination of all parameters)
     // Omit the blacklisted params (like JSONP callback param, etc.)
     var data = actionUtil.parseValues(req);
+
 
     // Create new instance of model using data from params
     Model.create(data).exec(function created(err, newInstance) {
@@ -101,29 +71,29 @@ let ApiController = (_dec = route({
   //  returns: {arg: 'JSON', type: null, root: true, description: 'The response body contains properties of {model} settings.\n'}
   //})
   destroyOne(req, res) {
-    var Model = actionUtil.parseModel(req);
-    var pk = actionUtil.requirePk(req);
+  var Model = actionUtil.parseModel(req);
+  var pk = actionUtil.requirePk(req);
 
-    var query = Model.findOne(pk);
-    query = actionUtil.populateEach(query, req);
-    query.exec(function foundRecord(err, record) {
-      if (err) return res.serverError(err);
-      if (!record) return res.notFound('No record found with the specified `id`.');
+  var query = Model.findOne(pk);
+  query = actionUtil.populateEach(query, req);
+  query.exec(function foundRecord(err, record) {
+    if (err) return res.serverError(err);
+    if (!record) return res.notFound('No record found with the specified `id`.');
 
-      Model.destroy(pk).exec(function destroyedRecord(err) {
-        if (err) return res.negotiate(err);
+    Model.destroy(pk).exec(function destroyedRecord(err) {
+      if (err) return res.negotiate(err);
 
-        if (sails.hooks.pubsub) {
-          Model.publishDestroy(pk, !sails.config.blueprints.mirror && req, { previous: record });
-          if (req.isSocket) {
-            Model.unsubscribe(req, record);
-            Model.retire(record);
-          }
+      if (sails.hooks.pubsub) {
+        Model.publishDestroy(pk, !sails.config.blueprints.mirror && req, {previous: record});
+        if (req.isSocket) {
+          Model.unsubscribe(req, record);
+          Model.retire(record);
         }
+      }
 
-        return res.ok(record);
-      });
+      return res.ok(record);
     });
+  });
   }
 
   updateOne(req, res) {
@@ -140,8 +110,9 @@ let ApiController = (_dec = route({
 
     // Omit the path parameter `id` from values, unless it was explicitly defined
     // elsewhere (body/query):
-    var idParamExplicitlyIncluded = req.body && req.body.id || req.query.id;
+    var idParamExplicitlyIncluded = ((req.body && req.body.id) || req.query.id);
     if (!idParamExplicitlyIncluded) delete values.id;
+
 
     // Find and update the targeted record.
     //
@@ -160,11 +131,14 @@ let ApiController = (_dec = route({
         // validation error is encountered, w/ validation info.
         if (err) return res.negotiate(err);
 
+
         // Because this should only update a single record and update
         // returns an array, just use the first item.  If more than one
         // record was returned, something is amiss.
         if (!records || !records.length || records.length > 1) {
-          req._sails.log.warn(util.format('Unexpected output from `%s.update`.', Model.globalId));
+          req._sails.log.warn(
+            util.format('Unexpected output from `%s.update`.', Model.globalId)
+          );
         }
 
         var updatedRecord = records[0];
@@ -192,7 +166,7 @@ let ApiController = (_dec = route({
           if (!populatedRecord) return res.serverError('Could not find record after updating!');
           res.ok(populatedRecord);
         }); // </foundAgain>
-      }); // </updated>
+      });// </updated>
     }); // </found>
   }
 
@@ -216,21 +190,26 @@ let ApiController = (_dec = route({
     });
   }
 
-  find(req, res) {
+  find(req,res){
 
     // Look up the model
     var Model = actionUtil.parseModel(req);
+
 
     // If an `id` param was specified, use the findOne blueprint action
     // to grab the particular instance with its primary key === the value
     // of the `id` param.   (mainly here for compatibility for 0.9, where
     // there was no separate `findOne` action)
-    if (actionUtil.parsePk(req)) {
-      return this.findOne(req, res);
+    if ( actionUtil.parsePk(req) ) {
+      return this.findOne(req,res);
     }
 
     // Lookup for records that match the specified criteria
-    var query = Model.find().where(actionUtil.parseCriteria(req)).limit(actionUtil.parseLimit(req)).skip(actionUtil.parseSkip(req)).sort(actionUtil.parseSort(req));
+    var query = Model.find()
+      .where( actionUtil.parseCriteria(req) )
+      .limit( actionUtil.parseLimit(req) )
+      .skip( actionUtil.parseSkip(req) )
+      .sort( actionUtil.parseSort(req) );
     // TODO: .populateEach(req.options);
     query = actionUtil.populateEach(query, req);
     query.exec(function found(err, matchingRecords) {
@@ -240,9 +219,7 @@ let ApiController = (_dec = route({
       // `autoWatch` is enabled.
       if (req._sails.hooks.pubsub && req.isSocket) {
         Model.subscribe(req, matchingRecords);
-        if (req.options.autoWatch) {
-          Model.watch(req);
-        }
+        if (req.options.autoWatch) { Model.watch(req); }
         // Also subscribe to instances of all associated models
         _.each(matchingRecords, function (record) {
           actionUtil.subscribeDeep(req, record);
@@ -252,7 +229,6 @@ let ApiController = (_dec = route({
       res.dataOk(matchingRecords);
     });
   }
-}, (_applyDecoratedDescriptor(_class.prototype, 'create', [_dec], Object.getOwnPropertyDescriptor(_class.prototype, 'create'), _class.prototype)), _class));
+}
 
 module.exports = ApiController;
-//# sourceMappingURL=sourcemaps/ApiControllerAbstract.js.map
