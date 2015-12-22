@@ -2,7 +2,7 @@
 /**
  * Module dependencies
  */
-var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil.js');
+var actionUtil = require('../hooks/blueprints-ex/actionUtil.js');
 
 let decorators = require('./Decorators');
 var route = decorators.route;
@@ -13,23 +13,10 @@ class ApiController {
 
   constructor() {
     this._config = { actions: false, rest: false, shortcuts: false };
-
-    /**
-     * small crunch to override sails controller structure
-     */
-    this.create = this.create;
-    this.find = this.find;
-    this.updateOne = this.updateOne;
-    this.findOne = this.findOne;
-    this.destroyOne = this.destroyOne;
   }
 
-  @description('The response body contains properties of {model} settings.\n')
-  @route({verb: 'post', path: '/users'})
   @swagger({
-    inherited: false,
-    model: null,
-    modelEditable: null,
+    description: 'The response body contains properties of {model}.\n',
     accepts: {args:'JSON', type: null, required: true, http: {source: 'body'}},
     returns: {arg: 'JSON', type: null, root: true, description: 'The response body contains properties of {model} settings.\n'}
   })
