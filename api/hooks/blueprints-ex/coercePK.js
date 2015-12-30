@@ -19,8 +19,8 @@ module.exports = function (sails) {
 	return function validId (id, controllerId, actionId) {
 
 		// Interlace app-global `config.controllers` with this controller's `_config`
-		var controllerConfig = _.merge({}, 
-			sails.config.controllers, 
+		var controllerConfig = _.merge({},
+			sails.config.controllers,
 			sails.controllers[controllerId]._config || {});
 
 
@@ -51,7 +51,7 @@ module.exports = function (sails) {
 			if (sails.config.environment === 'development') {
 				sails.log.warn('\n',
 							'Just then, you were prevented from being routed \n',
-							'to the `' + actionId + '` blueprint for controller: ' + controllerId + 
+							'to the `' + actionId + '` blueprint for controller: ' + controllerId +
 							' using `id='+id+'`.\n',
 							'This is because REST blueprint routes expect natural number ids by default, '+
 							'and so the `' + actionId + '()` middleware was skipped- \n',

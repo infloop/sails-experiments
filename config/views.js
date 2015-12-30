@@ -70,7 +70,7 @@ module.exports.views = {
   * e.g. your default might be                                                *
   * layout: 'layouts/public'                                                  *
   *                                                                           *
-  * But you might override that in some of your controllers with:             *
+  * But you might override that in some of your controllers-ex with:             *
   * layout: 'layouts/internal'                                                *
   *                                                                           *
   ****************************************************************************/

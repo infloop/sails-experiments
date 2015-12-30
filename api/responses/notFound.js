@@ -45,6 +45,8 @@ module.exports = function notFound (data, options) {
     return res.jsonx(data);
   }
 
+  return res.jsonx({ code: 40401, summary: ["Not found"]});
+
   // If second argument is a string, we take that to mean it refers to a view.
   // If it was omitted, use an empty object (`{}`)
   options = (typeof options === 'string') ? { view: options } : options || {};

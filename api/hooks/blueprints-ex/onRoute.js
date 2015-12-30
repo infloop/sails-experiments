@@ -25,11 +25,11 @@ module.exports = function (sails) {
 
 	/**
 	 * interpretRouteSyntax
-	 * 
+	 *
 	 * "Teach" router to understand direct references to blueprints
 	 * as a target to sails.router.bind()
 	 * (i.e. in the `routes.js` file)
-	 * 
+	 *
 	 * @param  {[type]} route [description]
 	 * @return {[type]}       [description]
 	 * @api private
@@ -63,7 +63,7 @@ module.exports = function (sails) {
 
 	/**
 	 * Bind explicit route to a blueprint action.
-	 * 
+	 *
 	 * @param  {[type]} path   [description]
 	 * @param  {[type]} blueprintActionID [description]
 	 * @param  {[type]} verb   [description]

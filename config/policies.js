@@ -21,7 +21,7 @@ module.exports.policies = {
 
   /***************************************************************************
   *                                                                          *
-  * Default policy for all controllers and actions (`true` allows public     *
+  * Default policy for all controllers-ex and actions (`true` allows public     *
   * access)                                                                  *
   *                                                                          *
   ***************************************************************************/

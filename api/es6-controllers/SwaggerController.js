@@ -1,10 +1,12 @@
-// api/controllers/SwaggerController.js
+const SwaggerController = {
+  doc (req, res) {
+    res.status(200).jsonx(sails.hooks.swagger.doc)
+  },
 
-var _ = require('lodash');
-var _super = require('sails-swagger/dist/api/controllers/SwaggerController');
+  ui (req, res) {
+    let docUrl = req.protocol + '://' + req.get('Host') + '/swagger/doc';
+    res.redirect(sails.config.swagger.ui.url + '?url=' + encodeURIComponent(docUrl))
+  }
+};
 
-_.merge(exports, _super);
-_.merge(exports, {
-
-  // Extend with custom logic here by adding additional fields, methods, etc.
-});
+export default SwaggerController

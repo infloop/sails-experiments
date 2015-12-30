@@ -29,6 +29,7 @@ var _ = require('lodash')
 
 module.exports = function(sails) {
 
+  return {};
   /**
    * Private dependencies.
    * (need access to `sails`)
@@ -152,7 +153,7 @@ module.exports = function(sails) {
       if (sails.hooks.orm) {
         eventsToWaitFor.push('hook:orm:loaded');
       }
-      if (sails.hooks['controllers-ex']) {
+      if (sails.hooks['controllers']) {
         eventsToWaitFor.push('hook:controllers-ex:loaded');
       }
       sails.after(eventsToWaitFor, hook.bindShadowRoutes);

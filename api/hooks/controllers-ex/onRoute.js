@@ -29,8 +29,6 @@ module.exports = function (sails) {
 			verb = route.verb,
 			options = route.options;
 
-    sails.middleware.controllers = sails.middleware['controllers-ex'];
-
 		if (_.isObject(target) && !_.isFunction(target) && !_.isArray(target)) {
 
 			// Merge target into `options` to get hold of relevant
@@ -80,7 +78,7 @@ module.exports = function (sails) {
 
 			// If this is a known controller, bind it
 			if ( controllerId && (
-				sails.middleware.controllers[controllerId] ||
+				sails.middleware['controllers-ex'][controllerId] ||
 				(sails.config.hooks.views.blueprints && sails.middleware.views[controllerId])
 				)
 			) {
@@ -111,13 +109,20 @@ module.exports = function (sails) {
 	 */
 	function bindController ( path, target, verb, options ) {
 
+    console.log('path: ' + path + ' verb: ' + verb);
 		// Normalize controller and action ids
 		var controllerId = util.normalizeControllerId(target.controller);
+    console.log('controllerId: ' + controllerId + ' action: ' + target.action);
 		var actionId = _.isString(target.action) ? target.action.toLowerCase() : null;
 
-		// Look up appropriate controller/action and make sure it exists
-		var controller = sails.middleware.controllers[controllerId];
+    console.log('keys');
+    console.log(_.keys(sails.middleware['controllers-ex']));
 
+		// Look up appropriate controller/action and make sure it exists
+		var controller = sails.middleware['controllers-ex'][controllerId];
+
+    console.log('controller.name:' + controller.name);
+    console.log(controller);
 		// Fall back to matching view
 		if (!controller) {
 			controller = sails.middleware.views[controllerId];
@@ -128,7 +133,7 @@ module.exports = function (sails) {
 		if ( ! ( controller && _.isObject(controller) )) {
 			sails.after('lifted', function () {
 				sails.log.error(
-					'Ignored attempt to bind route (' + path + ') to unknown controller ::',
+					'***Ignored attempt to bind route (' + path + ') to unknown controller ::',
 					controllerId+'.'
 				);
 			});
@@ -137,7 +142,7 @@ module.exports = function (sails) {
 		if ( actionId && !controller[actionId] ) {
 			sails.after('lifted', function () {
 				sails.log.error(
-					'Ignored attempt to bind route (' + path + ') to unknown controller.action ::',
+					'****Ignored attempt to bind route (' + path + ') to unknown controller.action ::',
 					controllerId + '.' + (actionId || 'index')
 				);
 			});

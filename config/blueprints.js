@@ -130,7 +130,7 @@ module.exports.blueprints = {
 
   /***************************************************************************
   *                                                                          *
-  * Whether the blueprint controllers should populate model fetches with     *
+  * Whether the blueprint controllers-ex should populate model fetches with     *
   * data from other models which are linked by associations                  *
   *                                                                          *
   * If you have a lot of data in one-to-many associations, leaving this on   *

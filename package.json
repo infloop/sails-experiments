@@ -52,8 +52,9 @@
     "sails": "~0.11.2",
     "sails-disk": "~0.10.0",
     "sails-stringfile": "^0.3.2",
-    "sails-swagger": "https://github.com/infloop/sails-swagger.git",
-    "sails-util": "^0.10.6"
+    "sails-util": "^0.10.6",
+    "hoek": "^2.14.0",
+    "marlinspike": "^0.12.10"
   },
   "devDependencies": {
     "babel-plugin-transform-decorators-legacy": "^1.3.3",

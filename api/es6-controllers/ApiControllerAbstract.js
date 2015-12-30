@@ -13,6 +13,7 @@ class ApiController {
 
   constructor() {
     this._config = { actions: false, rest: false, shortcuts: false };
+    this.name = this.constructor.name;
   }
 
   @swagger({
