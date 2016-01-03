@@ -16,8 +16,10 @@ var swaggerApi = decorators.swaggerApi;
  * @sw-model-alias({name: UserEditable, model: User, exclude: ['id']})
  */
 @swaggerApi({
-  basepath: 'api/v1',
-  description: 'Users'
+  tags: [{
+    title: 'Users',
+    description: 'Operations with users'
+  }]
 })
 class UserController extends ApiController {
 
@@ -35,7 +37,7 @@ class UserController extends ApiController {
     accepts: {args:'JSON', type: "userEditable", required: true, http: {source: 'body'}},
     returns: {arg: 'JSON', type: "user", root: true, description: 'The response body contains properties of {model}.\n'}
   })
-  @route({verb: 'post', path: '/users'})
+  @route({verb: 'post', path: '/api/v1/users'})
   create(req, res) {
     super.create(req, res);
   }
@@ -45,7 +47,7 @@ class UserController extends ApiController {
     accepts: {args:'JSON', type: "userEditable", required: true, http: {source: 'body'}},
     returns: {arg: 'JSON', type: "user", root: true, description: 'The response body contains properties of {model}.\n'}
   })
-  @route({verb: 'put', path: '/users/:id'})
+  @route({verb: 'put', path: '/api/v1/users/:id'})
   updateOne(req, res) {
     super.updateOne(req, res);
   }
@@ -63,7 +65,7 @@ class UserController extends ApiController {
     ],
     returns: {arg: 'JSON', type: ["user"], root: true, description: 'The response body contains list of {model}.\n'}
   })
-  @route({verb: 'get', path: '/users'})
+  @route({verb: 'get', path: '/api/v1/users'})
   find(req, res) {
     super.find(req, res);
   }
@@ -79,7 +81,7 @@ class UserController extends ApiController {
     ],
     returns: {arg: 'JSON', type: ["user"], root: true, description: 'The response body contains properties of {model}.\n'}
   })
-  @route({verb: 'get', path: '/users/:id'})
+  @route({verb: 'get', path: '/api/v1/users/:id'})
   findOne(req, res) {
     super.findOne(req, res);
   }
@@ -90,13 +92,13 @@ class UserController extends ApiController {
    */
 
   @swagger({
-    description: 'Get {model} by primary key.',
+    description: 'Delete {model} by primary key.',
     accepts: [
       {args:'id', type: "integer", required: true, http: {source: 'path'}}
     ],
     returns: {arg: 'JSON', type: ["user"], root: true, description: 'The response body contains properties of {model}.\n'}
   })
-  @route({verb: 'get', path: '/users/:id'})
+  @route({verb: 'delete', path: '/api/v1/users/:id'})
   destroyOne(req, res) {
     super.destroyOne(req, res);
   }

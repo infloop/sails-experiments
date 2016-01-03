@@ -7,5 +7,5 @@ module.exports.swagger = {
   ui: {
     url: 'http://swaggerui.balderdash.io'
   },
-  basePath: '/api/v1'
+  basePath: '/'
 };

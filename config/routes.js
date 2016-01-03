@@ -47,8 +47,8 @@ module.exports.routes = {
   ***************************************************************************/
 
   'POST /api/v1/users': {controller: "UserController", action: "create"},
-  'PUT /api/v1/users/:id': {controller: "UserController", action: "update"},
-  'DELETE /api/v1/users/:id': {controller: "UserController", action: "remove"},
+  'PUT /api/v1/users/:id': {controller: "UserController", action: "updateOne"},
+  'DELETE /api/v1/users/:id': {controller: "UserController", action: "destroyOne"},
   'GET /api/v1/users/:id': {controller: "UserController", action: "findOne"},
   'GET /api/v1/users': {controller: "UserController", action: "find"},
   'GET /swagger/doc': { cors: { origin: 'http://localhost:8080', methods: 'GET,OPTIONS,HEAD'}, controller: 'SwaggerController', action: 'doc' }

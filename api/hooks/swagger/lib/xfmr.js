@@ -73,12 +73,21 @@ const Transformer = {
    * http://swagger.io/specification/#tagObject
    */
   getTags (sails) {
-    return _.map(_.pluck(sails.controllers, 'globalId'), tagName => {
+    var tags = _.map(_.pluck(sails.controllers, 'globalId'), tagName => {
       return {
         name: tagName
         //description: `${tagName} Controller`
       }
-    })
+    });
+
+    // TODO
+    var extendedTags = _.map(_.pluck(sails.controllers, '_swagger'), swagger => {
+      return (swagger && swagger.tags) ? ({
+        name: swagger.tags
+      }) : null;
+    });
+
+    return tags;
   },
 
   /**
@@ -112,8 +121,8 @@ const Transformer = {
    * http://swagger.io/specification/#pathsObject
    * http://swagger.io/specification/#pathItemObject
    */
-  getPaths (sails) {
-    let routes = sails.router._privateRouter.routes
+  getPathsOld (sails) {
+    let routes = sails.router._privateRouter.routes;
     let pathGroups = _.chain(routes)
       .values()
       .flatten()
@@ -137,9 +146,40 @@ const Transformer = {
       return result
     }, []);
 
-    return _.mapValues(pathGroups, (pathGroup, key) => {
+    var res =  _.mapValues(pathGroups, (pathGroup, key) => {
       return Transformer.getPathItem(sails, pathGroup, key)
     })
+
+    return res;
+  },
+
+  getPaths (sails) {
+    let controllers = sails.controllers;
+
+    let paths = _.chain(_.values(controllers))
+      .map((controller) => {
+        return (controller._routes) ? _.values(controller._routes) : [];
+      })
+      .flatten()
+      .flatten()
+      .groupBy('path')
+      .mapValues((actions) => {
+        return _.chain(actions)
+          .groupBy('verb')
+          .mapValues((verbActions)=> {
+            var verbAction  = _.first(verbActions);
+            verbAction.tags = verbAction.tags.valueOf();
+            delete verbAction.accepts;
+            delete verbAction.returns;
+            delete verbAction.path;
+            delete verbAction.description;
+            return verbAction;
+          })
+          .value();
+      })
+      .value();
+
+    return paths;
   },
 
   getModelFromPath (sails, path) {

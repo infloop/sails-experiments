@@ -9,4 +9,4 @@ const SwaggerController = {
   }
 };
 
-export default SwaggerController
+module.exports = SwaggerController;

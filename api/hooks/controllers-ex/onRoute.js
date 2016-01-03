@@ -51,18 +51,6 @@ module.exports = function (sails) {
 
 				// TODO: if there is a legitimate use case for it, add other HTTP verbs here for completeness.
 			}
-
-			// Lone action syntax, e.g.:
-			// '/someRoute': { action: 'find', model: 'foo' }
-			//
-			// (useful for explicitly routing a URL to a blueprint action)
-			if ( !_.isUndefined(target.action) ) {
-
-				// Merge target def. into route options:
-				options.action = target.action;
-
-				return bindBlueprintAction(path, target.action, verb, options);
-			}
 		}
 
 		// Support string ('FooController.bar') notation
@@ -112,17 +100,17 @@ module.exports = function (sails) {
     console.log('path: ' + path + ' verb: ' + verb);
 		// Normalize controller and action ids
 		var controllerId = util.normalizeControllerId(target.controller);
-    console.log('controllerId: ' + controllerId + ' action: ' + target.action);
+    //console.log('controllerId: ' + controllerId + ' action: ' + target.action);
 		var actionId = _.isString(target.action) ? target.action.toLowerCase() : null;
 
-    console.log('keys');
-    console.log(_.keys(sails.middleware['controllers-ex']));
+    //console.log('keys');
+    //console.log(_.keys(sails.middleware['controllers-ex']));
 
 		// Look up appropriate controller/action and make sure it exists
 		var controller = sails.middleware['controllers-ex'][controllerId];
 
-    console.log('controller.name:' + controller.name);
-    console.log(controller);
+    //console.log('controller.name:' + controller.name);
+    //console.log(controller);
 		// Fall back to matching view
 		if (!controller) {
 			controller = sails.middleware.views[controllerId];
@@ -218,34 +206,5 @@ module.exports = function (sails) {
 
 		return;
 	}
-
-
-	/**
-	 * Bind specified blueprint action to the specified route.
-	 *
-	 * @param  {[type]} path              [description]
-	 * @param  {[type]} blueprintActionID [description]
-	 * @param  {[type]} verb              [description]
-	 * @param  {[type]} options           [description]
-	 * @return {[type]}                   [description]
-	 */
-	function bindBlueprintAction (path, blueprintActionID, verb, options){
-
-		// Look up appropriate blueprint action and make sure it exists
-		var blueprint = sails.middleware.blueprints[blueprintActionID];
-
-		// If a 'blueprint' was specified, but it doesn't exist, warn the user and ignore it.
-		if ( ! ( blueprint && _.isFunction(blueprint) )) {
-			sails.after('lifted', function () {
-				sails.log.error(
-					'Ignored attempt to bind route (' + path + ') to unknown blueprint action (`'+blueprintActionID+'`).'
-				);
-			});
-			return;
-		}
-
-		sails.router.bind(path, blueprint, verb, options);
-	}
-
 };
 

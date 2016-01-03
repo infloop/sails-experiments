@@ -74,15 +74,11 @@ module.exports = function(sails) {
 
 				if (err) return cb(err);
 
-
-
-				sails.controllers = modules;
+        // for backward compatibility
+        sails.controllers = modules;
 
 				// Register controllers
 				_.each(sails.controllers, function(controller, controllerId) {
-
-          console.log(controller.name, ':', controllerId);
-
 					// Override whatever was here before
 					if ( !util.isDictionary(self.middleware[controllerId]) ) {
 						self.middleware[controllerId] = {};
@@ -100,46 +96,34 @@ module.exports = function(sails) {
 					// -----/removed------
 
           if(controller.extended) {
-
-            console.log('extended');
-
             // Register this controller's actions
             _.each(Object.getOwnPropertyNames(controller), function(property) {
-              console.log('property: ' + property);
               var action = controller[property];
 
               // action ids are case insensitive
-              propertyName = property.toLowerCase();
+              var actionId = property.toLowerCase();
 
-              console.log('ACTION');
-              console.log(action);
               // If the action is set to `false`, explicitly disable it
               if (action === false) {
                 delete self.middleware[controllerId][actionId];
                 return;
               }
 
-              //if(!action.action){
-              //  delete self.middleware[controllerId][actionId];
-              //  return;
-              //}
-
               // Ignore non-actions (special properties)
               //
               // TODO:
               // Some of these properties are injected by `moduleloader`
               // They should be hidden in the prototype or omitted instead.
-              if (_.isString(action) || _.isBoolean(action)) {
+              if (_.isString(action) || _.isBoolean(action) || !_.isFunction(action)) {
                 return;
-              } else {
-                console.log('ACTION Ok!');
               }
-
-
 
               // Otherwise mix it in (this will override CRUD blueprints from above)
               action._middlewareType = 'ACTION: '+controllerId+'/'+actionId;
               self.middleware[controllerId][actionId] = action;
+              self.middleware[controllerId]._routes = controller._routes;
+              self.middleware[controllerId]._swagger = controller._swagger;
+
               self.explicitActions[controllerId] = self.explicitActions[controllerId] || {};
               self.explicitActions[controllerId][actionId] = true;
             });
