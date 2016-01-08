@@ -15,7 +15,7 @@ module.exports = function(sails) {
 	/**
 	 * Private dependencies.
 	 */
-	var onRoute = require('./onRoute')(sails);
+	var onRoute = require('./lib/onRoute')(sails);
 
 
 

@@ -2,12 +2,7 @@
 /**
  * Module dependencies
  */
-var actionUtil = require('../hooks/blueprints-ex/actionUtil.js');
-
-let decorators = require('./Decorators');
-var route = decorators.route;
-var description = decorators.description;
-var swagger = decorators.swagger;
+var actionUtil = require('../hooks/controllers-ex/lib/actionUtil.js');
 
 class ApiController {
 
@@ -16,11 +11,6 @@ class ApiController {
     this.name = this.constructor.name;
   }
 
-  @swagger({
-    description: 'The response body contains properties of {model}.\n',
-    accepts: {args:'JSON', type: null, required: true, http: {source: 'body'}},
-    returns: {arg: 'JSON', type: null, root: true, description: 'The response body contains properties of {model} settings.\n'}
-  })
   create(req, res) {
     var Model = actionUtil.parseModel(req);
 
@@ -52,15 +42,6 @@ class ApiController {
     });
   }
 
-  //@route({
-  //  inherited: false,
-  //  model: null,
-  //  modelEditable: null,
-  //  http: null,
-  //  description: 'Destroy {model}.\n',
-  //  accepts: {args:'JSON', type: null, required: true, http: {source: 'body'}},
-  //  returns: {arg: 'JSON', type: null, root: true, description: 'The response body contains properties of {model} settings.\n'}
-  //})
   destroyOne(req, res) {
   var Model = actionUtil.parseModel(req);
   var pk = actionUtil.requirePk(req);

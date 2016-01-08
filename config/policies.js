@@ -26,7 +26,7 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
-  '*': true,
+  '*': ['passport'],
 
   /***************************************************************************
   *                                                                          *
@@ -34,6 +34,19 @@ module.exports.policies = {
   * and its actions                                                          *
   *                                                                          *
   ***************************************************************************/
+
+  PassportAuthController: {
+    'login': true,
+    'logout': [ 'passport' ]
+  },
+
+  UserController: {
+    'create': true
+  },
+
+  SwaggerController: {
+    '*': true
+  }
 	// RabbitController: {
 
 		// Apply the `false` policy as the default for all of RabbitController's actions

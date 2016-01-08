@@ -45,6 +45,9 @@ const typeMap = {
 const Spec = {
   getPropertyType (wltype) {
     return types[typeMap[wltype] || wltype]
+  },
+  isEmbeddedType: function(wltype) {
+    return ((types[typeMap[wltype] || wltype]) || false) ? true : false;
   }
 };
 

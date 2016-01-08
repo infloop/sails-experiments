@@ -2,10 +2,10 @@
 
 var ApiController = require('./ApiControllerAbstract');
 
-let decorators = require('./Decorators');
-var route = decorators.route;
-var swagger = decorators.swagger;
-var swaggerApi = decorators.swaggerApi;
+let decorators = require('../decorators/controllers');
+let route = decorators.route;
+let swagger = decorators.swagger;
+let swaggerApi = decorators.swaggerApi;
 
 /**
  * UserController
@@ -19,7 +19,15 @@ var swaggerApi = decorators.swaggerApi;
   tags: [{
     title: 'Users',
     description: 'Operations with users'
-  }]
+  }],
+  models: {
+    responseUser: {
+      data: { type: 'user' }
+    },
+    responseListUser: {
+      data: { type: ['user'] }
+    }
+  }
 })
 class UserController extends ApiController {
 
@@ -35,7 +43,7 @@ class UserController extends ApiController {
   @swagger({
     description: 'Creates new {model}.',
     accepts: {args:'JSON', type: "userEditable", required: true, http: {source: 'body'}},
-    returns: {arg: 'JSON', type: "user", root: true, description: 'The response body contains properties of {model}.\n'}
+    returns: {status: 201, arg: 'JSON', type: "responseUser", root: true, description: 'The response body contains properties of {model}.\n'}
   })
   @route({verb: 'post', path: '/api/v1/users'})
   create(req, res) {
@@ -45,7 +53,7 @@ class UserController extends ApiController {
   @swagger({
     description: 'Updates a existing {model}.\n',
     accepts: {args:'JSON', type: "userEditable", required: true, http: {source: 'body'}},
-    returns: {arg: 'JSON', type: "user", root: true, description: 'The response body contains properties of {model}.\n'}
+    returns: {status: 200, arg: 'JSON', type: 'responseUser', root: true, description: 'The response body contains properties of {model}.\n'}
   })
   @route({verb: 'put', path: '/api/v1/users/:id'})
   updateOne(req, res) {
@@ -60,10 +68,10 @@ class UserController extends ApiController {
   @swagger({
     description: 'Find {model}s by query.\n',
     accepts: [
-      {args:'offset', type: "integer", required: true, http: {source: 'query'}},
-      {args:'limit', type: "integer", required: true, http: {source: 'query'}}
+      {args:'offset', type: "integer", required: false, http: {source: 'query'}},
+      {args:'limit', type: "integer", required: false, http: {source: 'query'}}
     ],
-    returns: {arg: 'JSON', type: ["user"], root: true, description: 'The response body contains list of {model}.\n'}
+    returns: {status: 200, arg: 'JSON', type: 'responseListUser', root: true, description: 'The response body contains list of {model}.\n'}
   })
   @route({verb: 'get', path: '/api/v1/users'})
   find(req, res) {
@@ -79,7 +87,7 @@ class UserController extends ApiController {
     accepts: [
       {args:'id', type: "integer", required: true, http: {source: 'path'}}
     ],
-    returns: {arg: 'JSON', type: ["user"], root: true, description: 'The response body contains properties of {model}.\n'}
+    returns: {status: 200, arg: 'JSON', type: 'responseUser', root: true, description: 'The response body contains properties of {model}.\n'}
   })
   @route({verb: 'get', path: '/api/v1/users/:id'})
   findOne(req, res) {
@@ -90,13 +98,12 @@ class UserController extends ApiController {
    * @param {req} req
    * @param {res} res
    */
-
   @swagger({
     description: 'Delete {model} by primary key.',
     accepts: [
       {args:'id', type: "integer", required: true, http: {source: 'path'}}
     ],
-    returns: {arg: 'JSON', type: ["user"], root: true, description: 'The response body contains properties of {model}.\n'}
+    returns: {status: 204, arg: 'JSON', type: 'responseUser', root: true, description: 'The response body contains properties of {model}.\n'}
   })
   @route({verb: 'delete', path: '/api/v1/users/:id'})
   destroyOne(req, res) {
@@ -104,5 +111,4 @@ class UserController extends ApiController {
   }
 }
 
-var a = module.exports = new UserController();
-console.log(a);
+module.exports = new UserController();

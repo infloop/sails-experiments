@@ -46,10 +46,16 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
+
+  'POST /api/v1/auth/login': {controller: "PassportAuthController", action: "login"},
+  'POST /api/v1/auth/logout': {controller: "PassportAuthController", action: "logout"},
+
   'POST /api/v1/users': {controller: "UserController", action: "create"},
   'PUT /api/v1/users/:id': {controller: "UserController", action: "updateOne"},
   'DELETE /api/v1/users/:id': {controller: "UserController", action: "destroyOne"},
   'GET /api/v1/users/:id': {controller: "UserController", action: "findOne"},
   'GET /api/v1/users': {controller: "UserController", action: "find"},
-  'GET /swagger/doc': { cors: { origin: 'http://localhost:8080', methods: 'GET,OPTIONS,HEAD'}, controller: 'SwaggerController', action: 'doc' }
+  '/swagger/doc': { cors: { origin: 'http://localhost:8080', methods: 'GET,OPTIONS,HEAD'}, controller: 'SwaggerController', action: 'doc' },
+
+  'POST /api/v1/users/:id/avatar': {controller: "AssetController", action: "createUserAsset"}
 };

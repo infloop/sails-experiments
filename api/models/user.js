@@ -14,17 +14,17 @@ function hashPassword(values, next) {
 module.exports = {
   attributes: {
     id: {
-      type: 'STRING',
-      primaryKey: true,
-      required: true
+      type: 'string',
+      unique: true,
+      primaryKey: true
     },
     username: {
-      type: 'STRING',
+      type: 'string',
       required: true,
       unique: true
     },
     password: {
-      type: 'STRING',
+      type: 'string',
       required: true,
       minLength: 6
     },
@@ -33,6 +33,23 @@ module.exports = {
       required: true,
       unique: true
     },
+    firstName: {
+      type: 'string',
+      required: false
+    },
+    lastName: {
+      type: 'string',
+      required: false
+    },
+    age: {
+      type: 'integer',
+      required: false
+    },
+    sex: {
+      type: 'string',
+      enum: ['m', 'f', 'denied']
+    },
+
     // Override toJSON instance method to remove password value
     toJSON: function() {
       var obj = this.toObject();
@@ -48,6 +65,12 @@ module.exports = {
       return bcrypt.compareSync(password, obj.password);
     }
   },
+  autoCreatedAt: true,
+  autoUpdatedAt: true,
+
+  hiddenAttributes: ['password'],
+  protectedAttributes: ['id','createdAt','updatedAt'],
+
   // Lifecycle Callbacks
   beforeCreate: function(values, next) {
     hashPassword(values, next);
