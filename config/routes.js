@@ -57,5 +57,6 @@ module.exports.routes = {
   'GET /api/v1/users': {controller: "UserController", action: "find"},
   '/swagger/doc': { cors: { origin: 'http://localhost:8080', methods: 'GET,OPTIONS,HEAD'}, controller: 'SwaggerController', action: 'doc' },
 
-  'POST /api/v1/users/:id/avatar': {controller: "AssetController", action: "createUserAsset"}
+  'POST /api/v1/users/:id/avatar': {controller: "AssetController", action: "createUserAsset"},
+  'GET /api/v1/pairs': {controller: "PairController", action: "findOne"}
 };

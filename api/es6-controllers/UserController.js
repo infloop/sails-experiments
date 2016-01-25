@@ -85,9 +85,13 @@ class UserController extends ApiController {
   @swagger({
     description: 'Get {model} by primary key.',
     accepts: [
-      {args:'id', type: "integer", required: true, http: {source: 'path'}}
+      {args:'id', type: "string", required: true, http: {source: 'path'}}
     ],
-    returns: {status: 200, arg: 'JSON', type: 'responseUser', root: true, description: 'The response body contains properties of {model}.\n'}
+    returns: [
+      {status: 200, arg: 'JSON', type: 'responseUser', root: true, description: 'The response body contains properties of {model}.\n'},
+      {status: 404, description: 'User not found exception'},
+      {status: 403, description: 'Forbidden exception'}
+    ]
   })
   @route({verb: 'get', path: '/api/v1/users/:id'})
   findOne(req, res) {
@@ -101,7 +105,7 @@ class UserController extends ApiController {
   @swagger({
     description: 'Delete {model} by primary key.',
     accepts: [
-      {args:'id', type: "integer", required: true, http: {source: 'path'}}
+      {args:'id', type: "string", required: true, http: {source: 'path'}}
     ],
     returns: {status: 204, arg: 'JSON', type: 'responseUser', root: true, description: 'The response body contains properties of {model}.\n'}
   })

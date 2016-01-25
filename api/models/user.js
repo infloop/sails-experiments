@@ -13,11 +13,10 @@ function hashPassword(values, next) {
 
 module.exports = {
   attributes: {
-    id: {
-      type: 'string',
-      unique: true,
-      primaryKey: true
-    },
+    //id: {
+    //  type: 'string',
+    //  primaryKey: true
+    //},
     username: {
       type: 'string',
       required: true,
@@ -49,6 +48,9 @@ module.exports = {
       type: 'string',
       enum: ['m', 'f', 'denied']
     },
+    avatar: {
+      type: 'string'
+    },
 
     // Override toJSON instance method to remove password value
     toJSON: function() {
@@ -69,7 +71,7 @@ module.exports = {
   autoUpdatedAt: true,
 
   hiddenAttributes: ['password'],
-  protectedAttributes: ['id','createdAt','updatedAt'],
+  protectedAttributes: ['id','createdAt','updatedAt','avatar'],
 
   // Lifecycle Callbacks
   beforeCreate: function(values, next) {
@@ -78,18 +80,9 @@ module.exports = {
   beforeUpdate: function(values, next) {
     if (values.password) {
       hashPassword(values, next);
-    }
-    else {
+    } else {
       //IMPORTANT: The following is only needed when a BLANK password param gets submitted through a form. Otherwise, a next() call is enough.
-      User.findOne(values.id).done(function(err, user) {
-        if (err) {
-          next(err);
-        }
-        else {
-          values.password = user.password;
-          next();
-        }
-      });
+      next();
     }
   }
 };

@@ -177,7 +177,7 @@ const Transformer = {
   getPaths (sails) {
     let controllers = sails.controllers;
 
-    let paths = _.chain(_.values(controllers))
+    return _.chain(_.values(controllers))
       .map((controller) => {
         return (controller._routes) ? _.values(controller._routes) : [];
       })
@@ -199,9 +199,13 @@ const Transformer = {
           })
           .value();
       })
+      .transform((paths, pathValue, pathKey) => {
+        // TODO make better replacement
+        pathKey = pathKey.replace(/(.+)(\/)(:)(.+)(\/)(.+)/, '$1$2{$4}$5$6');
+        pathKey = pathKey.replace(/(.+)(\/)(:)(.+)/, '$1$2{$4}');
+        paths[pathKey] = pathValue;
+      })
       .value();
-
-    return paths;
   },
 
   getModelFromPath (sails, path) {
