@@ -47,8 +47,8 @@ module.exports.routes = {
   ***************************************************************************/
 
 
-  'POST /api/v1/auth/login': {controller: "PassportAuthController", action: "login"},
-  'POST /api/v1/auth/logout': {controller: "PassportAuthController", action: "logout"},
+  'POST /api/v1/auth/login': {controller: "AuthController", action: "login"},
+  'POST /api/v1/auth/logout': {controller: "AuthController", action: "logout"},
 
   'POST /api/v1/users': {controller: "UserController", action: "create"},
   'PUT /api/v1/users/:id': {controller: "UserController", action: "updateOne"},

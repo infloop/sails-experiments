@@ -1,10 +1,29 @@
-
 let decorators = require('../decorators/controllers');
 let route = decorators.route;
 let swagger = decorators.swagger;
 let swaggerApi = decorators.swaggerApi;
 
 var passport = require('passport');
+
+/**
+ * Triggers when user authenticates via passport
+ * @param {Object} req Request object
+ * @param {Object} res Response object
+ * @param {Object} error Error object
+ * @param {Object} user User profile
+ * @param {Object} info Info if some error occurs
+ * @private
+ */
+function processPassportAuth(req, res, error, user, info) {
+  if (error) return res.serverError(error);
+  if (!user) return res.unauthorized(null, info && info.code, info && info.message);
+
+  return res.ok({
+    // TODO: replace with new type of cipher service
+    token: CipherService.createToken(user),
+    user: user
+  });
+}
 
 @swaggerApi({
   tags: [{
@@ -37,24 +56,8 @@ class PassportAuthController {
   })
   @route({verb: 'post', path: '/api/v1/auth/login'})
   login(req,res) {
-    res.view({ message: req.flash('error') });
-  }
-
-  loginProcess(req, res, next) {
-    passport.authenticate('local', function(err, user, info) {
-      if (err) return next(err);
-      if (!user) {
-        return res.view('passportauth/login', {
-          username: req.body.username,
-          message: info.message
-        });
-      }
-      req.logIn(user, function(err) {
-        if (err) return next(err);
-        // TODO make UnAuthenticated error
-        return res.redirect('/protected');
-      });
-    })(req, res, next);
+    passport.authenticate('local',
+      processPassportAuth.bind(this, req, res))(req, res);
   }
 
   @swagger({
@@ -66,10 +69,6 @@ class PassportAuthController {
   logout(req,res) {
     req.logout();
     res.redirect('/');
-  }
-
-  protected(req, res) {
-    res.view();
   }
 }
 

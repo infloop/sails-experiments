@@ -26,7 +26,7 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
-  '*': ['passport'],
+  '*': ['isAuthenticated'],
 
   /***************************************************************************
   *                                                                          *
@@ -37,7 +37,7 @@ module.exports.policies = {
 
   PassportAuthController: {
     'login': true,
-    'logout': [ 'passport' ]
+    'logout': [ 'isAuthenticated' ]
   },
 
   UserController: {

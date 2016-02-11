@@ -1,15 +1,3 @@
-//var bcrypt = require('bcrypt');
-
-function hashPassword(values, next) {
-  //bcrypt.hash(values.password, 10, function(err, hash) {
-  //  if (err) {
-  //    return next(err);
-  //  }
-  //  values.password = hash;
-  //  next();
-  //});
-  next();
-}
 
 module.exports = {
   attributes: {
@@ -29,6 +17,7 @@ module.exports = {
     },
     email: {
       type: 'email',
+      email: true,
       required: true,
       unique: true
     },
@@ -46,7 +35,7 @@ module.exports = {
     },
     sex: {
       type: 'string',
-      enum: ['m', 'f', 'denied']
+      enum: ['m', 'f']
     },
     avatar: {
       type: 'string'
@@ -57,14 +46,6 @@ module.exports = {
       var obj = this.toObject();
       delete obj.password;
       return obj;
-    },
-    validPassword: function(password, callback) {
-      var obj = this.toObject();
-      if (callback) {
-        //callback (err, res)
-        return bcrypt.compare(password, obj.password, callback);
-      }
-      return bcrypt.compareSync(password, obj.password);
     }
   },
   autoCreatedAt: true,
@@ -74,15 +55,12 @@ module.exports = {
   protectedAttributes: ['id','createdAt','updatedAt','avatar'],
 
   // Lifecycle Callbacks
-  beforeCreate: function(values, next) {
-    hashPassword(values, next);
+  beforeUpdate: function (values, next) {
+    CipherService.hashPassword(values);
+    next();
   },
-  beforeUpdate: function(values, next) {
-    if (values.password) {
-      hashPassword(values, next);
-    } else {
-      //IMPORTANT: The following is only needed when a BLANK password param gets submitted through a form. Otherwise, a next() call is enough.
-      next();
-    }
+  beforeCreate: function (values, next) {
+    CipherService.hashPassword(values);
+    next();
   }
 };
