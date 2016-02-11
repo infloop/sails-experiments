@@ -4,6 +4,7 @@
   },
   "hooks": {
     "controllers": false,
-    "blueprints": false
+    "blueprints": false,
+    "policies": false
   }
 }

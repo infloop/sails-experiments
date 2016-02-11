@@ -28,9 +28,9 @@ class AssetController {
   createUserAsset(req, res) {
     req.file('avatar').upload({
       // don't allow the total upload size to exceed ~10MB
-      dirname: require('path').resolve(sails.config.appPath, '/uploads/avatars'),
+      dirname: require('path').resolve(sails.config.appPath, './uploads/avatars'),
       maxBytes: 10*1024*1024
-    },function whenDone(err, uploadedFiles) {
+    },function done(err, uploadedFiles) {
       if (err) {
         return res.negotiate(err);
       }
@@ -40,6 +40,7 @@ class AssetController {
         return res.badRequest('No file was uploaded');
       }
 
+      console.log('donne', sails.getBaseUrl(), req.user ,req.params.all().id);
 
       // Save the "fd" and the url where the avatar for a user can be accessed
       user.update(req.params.all().id, {
