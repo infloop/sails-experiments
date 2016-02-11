@@ -4,7 +4,7 @@ var sourcemaps = require("gulp-sourcemaps");
 var watch = require('gulp-watch');
 var batch = require('gulp-batch');
 
-gulp.task('default', function () {
+gulp.task('default', ['compile'], function () {
   watch('api/es6-controllers/*.js', batch(function (events, done) {
     gulp.start('compile', done);
   }));
