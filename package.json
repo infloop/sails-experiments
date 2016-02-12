@@ -57,6 +57,9 @@
     "sails": "~0.11.2",
     "sails-disk": "~0.10.0",
     "sails-mongo": "^0.11.5",
+    "sails-service-image": "^3.1.1",
+    "sails-service-sms": "^3.1.1",
+    "sails-service-storage": "^3.2.1",
     "sails-stringfile": "^0.3.2",
     "sails-util": "^0.10.6"
   },

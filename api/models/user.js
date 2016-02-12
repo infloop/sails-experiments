@@ -37,7 +37,7 @@ module.exports = {
       enum: ['m', 'f']
     },
     avatar: {
-      type: 'string'
+      model: 'asset'
     },
 
     // Override toJSON instance method to remove password value

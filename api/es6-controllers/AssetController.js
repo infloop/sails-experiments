@@ -42,19 +42,17 @@ class AssetController {
 
       console.log('donne', sails.getBaseUrl(), req.user ,req.params.all().id);
 
-      // Save the "fd" and the url where the avatar for a user can be accessed
-      user.update(req.params.all().id, {
-
-          // Generate a unique URL where the avatar can be downloaded.
-          avatar: require('util').format('%s/user/avatar/%s', sails.getBaseUrl(), req.session.me),
-
-          // Grab the first file and use it's `fd` (file descriptor)
-          avatarFd: uploadedFiles[0].fd
+      asset.create({
+          path: uploadedFiles[0].fd,
+          description: 'user avatar'
+      })
+      .then(function(asset) {
+        user.update(req.params.all().id, {
+          avatar: asset.id,
         })
-        .exec(function (err){
-          if (err) return res.negotiate(err);
-          return res.jsonx({data:'ok'});
-        });
+        .then(res.ok)
+      })
+      .catch(res.badRequest);
     });
   }
 }
