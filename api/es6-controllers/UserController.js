@@ -1,11 +1,13 @@
 'use strict';
 
 var ApiController = require('./ApiControllerAbstract');
+var actionUtil = require('../hooks/controllers-ex/lib/actionUtil.js');
 
 let decorators = require('../decorators/controllers');
 let route = decorators.route;
 let swagger = decorators.swagger;
 let swaggerApi = decorators.swaggerApi;
+
 
 /**
  * UserController
@@ -60,10 +62,6 @@ class UserController extends ApiController {
     super.updateOne(req, res);
   }
 
-  /**
-   * @param {req} req
-   * @param {res} res
-   */
 
   @swagger({
     description: 'Find {model}s by query.\n',
@@ -75,7 +73,30 @@ class UserController extends ApiController {
   })
   @route({verb: 'get', path: '/api/v1/users'})
   find(req, res) {
-    super.find(req, res);
+    // Lookup for records that match the specified criteria
+    var query = user.find()
+      .populate('avatar')
+      .where( actionUtil.parseCriteria(req) )
+      .limit( actionUtil.parseLimit(req) )
+      .skip( actionUtil.parseSkip(req) )
+      .sort( actionUtil.parseSort(req) );
+    query = actionUtil.populateEach(query, req);
+    query.exec(function found(err, matchingRecords) {
+      if (err) return res.serverError(err);
+
+      // Only `.watch()` for new instances of the model if
+      // `autoWatch` is enabled.
+      if (req._sails.hooks.pubsub && req.isSocket) {
+        Model.subscribe(req, matchingRecords);
+        if (req.options.autoWatch) { Model.watch(req); }
+        // Also subscribe to instances of all associated models
+        _.each(matchingRecords, function (record) {
+          actionUtil.subscribeDeep(req, record);
+        });
+      }
+
+      res.dataOk(matchingRecords);
+    });
   }
 
   /**

@@ -36,6 +36,8 @@ module.exports.routes = {
   //  view: 'homepage'
   //}
 
+  'GET /images/avatars/:file': 'ProtectedFileController.downloadAvatar',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
@@ -58,5 +60,6 @@ module.exports.routes = {
   '/swagger/doc': { cors: { origin: 'http://localhost:8080', methods: 'GET,OPTIONS,HEAD'}, controller: 'SwaggerController', action: 'doc' },
 
   'POST /api/v1/users/:id/avatar': {controller: "AssetController", action: "createUserAsset"},
+  'GET /api/v1/assets': {controller: "AssetController", action: "find"},
   'GET /api/v1/pairs': {controller: "PairController", action: "findOne"}
 };
